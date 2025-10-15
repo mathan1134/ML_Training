@@ -46,33 +46,33 @@
 
 # bert for input dtls
 
-import tensorflow as tf
-from tensorflow.keras.layers import Input,Dense,MultiHeadAttention,LayerNormalization,GlobalAveragePooling1D,Lambda
-from tensorflow.keras.models import Model
-import numpy as np
+# import tensorflow as tf
+# from tensorflow.keras.layers import Input,Dense,MultiHeadAttention,LayerNormalization,GlobalAveragePooling1D,Lambda
+# from tensorflow.keras.models import Model
+# import numpy as np
 
-def t_encoder(x,num_heads,ff_dim):
-    attn=MultiHeadAttention(num_heads=num_heads,key_dim=ff_dim)(x,x)
-    x=LayerNormalization()(x+attn)
+# def t_encoder(x,num_heads,ff_dim):
+#     attn=MultiHeadAttention(num_heads=num_heads,key_dim=ff_dim)(x,x)
+#     x=LayerNormalization()(x+attn)
 
-    ff=Dense(ff_dim,activation="relu")(x)
-    ff=Dense(x.shape[-1])(ff)
-    return LayerNormalization()(x+ff)
+#     ff=Dense(ff_dim,activation="relu")(x)
+#     ff=Dense(x.shape[-1])(ff)
+#     return LayerNormalization()(x+ff)
 
-input=Input(shape=(5,16))
-x=t_encoder(input,num_heads=2,ff_dim=32)
-# x = GlobalAveragePooling1D()(x)
-x = Lambda(lambda t: tf.reduce_mean(t, axis=1))(x)
-op=Dense(2,activation="softmax")(x)
+# input=Input(shape=(5,16))
+# x=t_encoder(input,num_heads=2,ff_dim=32)
+# # x = GlobalAveragePooling1D()(x)
+# x = Lambda(lambda t: tf.reduce_mean(t, axis=1))(x)
+# op=Dense(2,activation="softmax")(x)
 
-bert_model=Model(input,op)
-bert_model.summary()
+# bert_model=Model(input,op)
+# bert_model.summary()
 
-X=np.random.rand(10,5,15)
-y=tf.keras.utils.to_categorical(np.random.randint(0,2,10),num_classes=2)
+# X=np.random.rand(10,5,16)
+# y=tf.keras.utils.to_categorical(np.random.randint(0,2,10),num_classes=2)
 
-bert_model.compile(optimizer="adam",loss="categorical_crossentrophy")
-bert_model.fit(X,y,epochs=5)
+# bert_model.compile(optimizer="adam",loss="categorical_crossentropy")
+# bert_model.fit(X,y,epochs=5)
 
 
 
